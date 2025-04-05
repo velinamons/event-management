@@ -11,7 +11,7 @@ class EventListCreateView(ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Event.objects.all()
+        return Event.objects.all().order_by("-is_registration_active", "date")
 
     def get_serializer_class(self):
         if self.request.method == "POST":
