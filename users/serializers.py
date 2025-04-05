@@ -27,3 +27,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.set_password(validated_data["password"])
         user.save()
         return user
+
+    def validate(self, attrs):
+        extra_fields = set(attrs.keys()) - set(self.Meta.fields)
+        if extra_fields:
+            raise serializers.ValidationError(f"Invalid fields: {', '.join(extra_fields)}")
+        return attrs
