@@ -13,12 +13,16 @@ class RegisterView(CreateAPIView):
 
 
 class ListUsersView(ListAPIView):
-    queryset = User.objects.filter(is_staff=False, is_superuser=False, is_active=True)
     permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
+
+    def get_queryset(self):
+        return User.objects.filter(is_staff=False, is_superuser=False, is_active=True)
 
 
 class RetrieveUserView(RetrieveAPIView):
-    queryset = User.objects.filter(is_staff=False, is_superuser=False, is_active=True)
     permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
+
+    def get_queryset(self):
+        return User.objects.filter(is_staff=False, is_superuser=False, is_active=True)
