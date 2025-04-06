@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.utils import timezone
 
 from users.serializers import UserSerializer
-from .models import Event
+from .models import Event, EventRegistration
 
 
 class EventReadSerializer(serializers.ModelSerializer):
@@ -33,3 +33,13 @@ class EventWriteSerializer(serializers.ModelSerializer):
         if value <= timezone.now():
             raise serializers.ValidationError("The event date must be in the future.")
         return value
+
+
+class EventRegistrationSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField()
+    event = EventReadSerializer()
+
+    class Meta:
+        model = EventRegistration
+        fields = ["id", "user", "event", "registration_date"]
+        read_only_fields = ["id", "user", "event", "registration_date"]
