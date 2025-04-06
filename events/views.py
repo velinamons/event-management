@@ -1,10 +1,13 @@
 # events/views.py
-
+from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView
-from .models import Event
-from .serializers import EventReadSerializer, EventWriteSerializer
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from .models import Event, EventRegistration
+from .serializers import EventReadSerializer, EventWriteSerializer, EventRegistrationSerializer
 
 
 class EventListCreateView(ListCreateAPIView):
@@ -36,3 +39,40 @@ class EventRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
         if self.request.method in ["PUT", "PATCH", "DELETE"] and obj.organizer != self.request.user:
             raise PermissionDenied("You are not the organizer of this event.")
         return obj
+
+
+class EventRegisterView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        try:
+            event = Event.objects.get(pk=pk)
+        except Event.DoesNotExist:
+            return Response({"detail": "Event not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        if not event.is_registration_active:
+            return Response({"detail": "Registration is closed for this event."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if event.organizer == request.user:
+            return Response({"detail": "Organizers cannot register for their own events."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        if EventRegistration.objects.filter(user=request.user, event=event).exists():
+            return Response({"detail": "You are already registered for this event."}, status=status.HTTP_400_BAD_REQUEST)
+
+        registration = EventRegistration.objects.create(user=request.user, event=event)
+        serializer = EventRegistrationSerializer(registration)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class EventUnregisterView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, pk):
+        try:
+            registration = EventRegistration.objects.get(user=request.user, event_id=pk)
+        except EventRegistration.DoesNotExist:
+            return Response({"detail": "You are not registered for this event."}, status=status.HTTP_400_BAD_REQUEST)
+
+        registration.delete()
+        return Response({"detail": "Successfully unregistered."}, status=status.HTTP_204_NO_CONTENT)
