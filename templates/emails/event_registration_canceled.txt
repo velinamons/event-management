@@ -1,0 +1,13 @@
+Hello {{ first_name }} {{ last_name }},
+
+Your registration for the event: "{{ event_title }}" has been canceled.
+
+Original Registration Time: {{ registration_date }} at {{ registration_time }} ({{ registration_timezone }})
+
+Event Details:
+- Date & Time: {{ event_date }} at {{ event_time }} ({{ event_timezone }})
+- Location: {{ location }}
+- Organized by: {{ organizer_name }} {{ organizer_surname }} ({{ organizer_email }})
+
+
+We're sorry to see you go! If this was a mistake, feel free to register again.

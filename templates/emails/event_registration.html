@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Event Registration</title>
+</head>
+<body>
+    <h2>Hello {{ first_name }} {{ last_name }},</h2>
+    <p>You have successfully registered for the event: <strong>{{ event_title }}</strong>.</p>
+    <p>{{ event_description }}</p>
+
+    <h3>Event Details:</h3>
+    <ul>
+        <li><strong>Date & Time:</strong> {{ event_date }} at {{ event_time }} ({{ event_timezone }})</li>
+        <li><strong>Location:</strong> {{ location }}</li>
+        <li><strong>Organized by:</strong> {{ organizer_name }} {{ organizer_surname }} ({{ organizer_email }})</li>
+    </ul>
+
+    <p><strong>Registration Time:</strong> {{ registration_date }} at {{ registration_time }} ({{ registration_timezone }})</p>
+
+    <p>Thank you for registering!</p>
+</body>
+</html>
