@@ -1,4 +1,3 @@
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
@@ -6,9 +5,11 @@ from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIV
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from emails.enums import EmailType
 from .filters import EventFilter
 from .models import Event, EventRegistration
 from .serializers import EventReadSerializer, EventWriteSerializer, EventRegistrationSerializer
+from emails import tasks
 
 
 class EventListCreateView(ListCreateAPIView):
@@ -63,6 +64,9 @@ class EventRegisterView(APIView):
             return Response({"detail": "You are already registered for this event."}, status=status.HTTP_400_BAD_REQUEST)
 
         registration = EventRegistration.objects.create(user=request.user, event=event)
+
+        tasks.send_email.delay(registration_id=registration.id, email_type=EmailType.EVENT_REGISTRATION)
+
         serializer = EventRegistrationSerializer(registration)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -75,6 +79,8 @@ class EventUnregisterView(APIView):
             registration = EventRegistration.objects.get(user=request.user, event_id=pk)
         except EventRegistration.DoesNotExist:
             return Response({"detail": "You are not registered for this event."}, status=status.HTTP_400_BAD_REQUEST)
+
+        tasks.send_email.delay(registration_id=registration.id, email_type=EmailType.EVENT_REGISTRATION_CANCELED)
 
         registration.delete()
         return Response({"detail": "Successfully unregistered."}, status=status.HTTP_204_NO_CONTENT)
