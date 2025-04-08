@@ -1,4 +1,4 @@
-# events/views.py
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
@@ -6,15 +6,17 @@ from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIV
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from .filters import EventFilter
 from .models import Event, EventRegistration
 from .serializers import EventReadSerializer, EventWriteSerializer, EventRegistrationSerializer
 
 
 class EventListCreateView(ListCreateAPIView):
     permission_classes = [IsAuthenticated]
+    filterset_class = EventFilter
 
     def get_queryset(self):
-        return Event.objects.all().order_by("-is_registration_active", "date")
+        return Event.objects.all().select_related("organizer").order_by("-is_registration_active", "date")
 
     def get_serializer_class(self):
         if self.request.method == "POST":
