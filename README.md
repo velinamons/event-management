@@ -13,7 +13,11 @@ A Django REST API for managing events, user authentication, and event registrati
   - CRUD operations for events + filtering.
   - Event validation (future date, organizer auto-set).
 - **Event Registration**: Users can register and unregister for events.
-- **Email Notifications**: Email alerts for event registration and unregistration.
+- **Email Notifications:**
+  - For event registration:
+    ![email_example1.png](images/email_example1.png)
+  - For event registration cancellation:
+    ![email_example2.png](images/email_example2.png)
 
 
 ### **API Docs:**
