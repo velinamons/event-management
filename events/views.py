@@ -46,6 +46,7 @@ class EventRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
 
 class EventRegisterView(APIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = EventRegistrationSerializer
 
     def post(self, request, pk):
         try:

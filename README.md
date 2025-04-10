@@ -20,9 +20,21 @@ A Django REST API for managing events, user authentication, and event registrati
     ![email_example2.png](images/email_example2.png)
 
 
-### **API Docs:**
-Link to Postman collection documentation:
-https://www.postman.com/science-candidate-74537104/event-management/documentation/wuw0ovb/event-management
+### API Documentation
+
+You can explore the available API endpoints using the basic built-in schema and documentation tools:
+
+- **OpenAPI Schema (JSON):**  
+  [`/api/schema/`](http://localhost:8000/api/schema/)
+
+- **Swagger UI (Interactive docs):**  
+  [`/api/docs/swagger/`](http://localhost:8000/api/docs/swagger/)
+
+- **ReDoc (Styled API reference):**  
+  [`/api/docs/redoc/`](http://localhost:8000/api/docs/redoc/)
+ 
+For more detailed request/response examples and real usage:
+- [Link to Postman Documentation](https://www.postman.com/science-candidate-74537104/event-management/documentation/wuw0ovb/event-management)
 
 
 ### **Docker Setup Instructions:**
