@@ -16,6 +16,11 @@ A Django REST API for managing events, user authentication, and event registrati
 - **Email Notifications**: Email alerts for event registration and unregistration.
 
 
+### **API Docs:**
+Link to Postman collection documentation:
+https://www.postman.com/science-candidate-74537104/event-management/documentation/wuw0ovb/event-management
+
+
 ### **Docker Setup Instructions:**
 
 To run the project using Docker, follow these steps:
